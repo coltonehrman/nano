@@ -256,8 +256,13 @@ export const h = (tagNameOrComponent: any, props: any = {}, ...children: any[]) 
     // handel ref
     if (p === 'ref') ref = props[p]
     // handle events
-    else if (isEvent(element, p.toLowerCase()))
-      element.addEventListener(p.toLowerCase().substring(2), (e: any) => props[p](e))
+    else if (isEvent(element, p.toLowerCase())) {
+      if (p === '__htmlonclick') {
+        element.setAttribute('onclick', props[p])
+      } else {
+        element.addEventListener(p.toLowerCase().substring(2), (e: any) => props[p](e))
+      }
+    }
     // dangerouslySetInnerHTML
     else if (p === 'dangerouslySetInnerHTML' && props[p].__html) {
       if (!isSSR()) {
